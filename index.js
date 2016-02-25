@@ -16,7 +16,7 @@ module.exports = function () {
       if (req.body.inline_query) {
         var results = []
         _.each(data.rates, function (d, sym) {
-          if (req.body.inline_query.query && !sym.startsWith(req.body.inline_query.toUpperCase()))
+          if (req.body.inline_query.query && !sym.startsWith(req.body.inline_query.query.toUpperCase()))
             return
           var rate = (data.rates.HKD / d).toFixed(2)
           results.push({

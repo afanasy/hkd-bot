@@ -1,6 +1,6 @@
 {
   "name": "hkd-bot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Telegram @HKDBot",
   "scripts": {
     "test": "node test"
