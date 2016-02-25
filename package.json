@@ -1,0 +1,27 @@
+{
+  "name": "hkd-bot",
+  "version": "0.0.2",
+  "description": "Telegram @HKDBot",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akura-co/hkd-bot.git"
+  },
+  "author": "Afanasii Kurakin <afanasy@akura.co>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akura-co/hkd-bot/issues"
+  },
+  "homepage": "https://github.com/akura-co/hkd-bot",
+  "hkd-bot": {
+    "url": "https://api.telegram.org/bot",
+    "setWebhook": "https://akura.co/telegram/hkdBot/hook"
+  },
+  "dependencies": {
+    "underscore": "1.8.3",
+    "request": "2.69.0",
+    "solid-config": "1.3.0"
+  }
+}
