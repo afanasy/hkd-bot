@@ -17,7 +17,7 @@
   "homepage": "https://github.com/akura-co/hkd-bot",
   "hkd-bot": {
     "url": "https://api.telegram.org/bot",
-    "setWebhook": "https://akura.co/telegram/hkdBot/hook"
+    "setWebhook": "https://akura.co/telegram/hkd-bot/hook"
   },
   "dependencies": {
     "underscore": "1.8.3",
