@@ -3,6 +3,19 @@ var
   request = require('request'),
   config = require('solid-config')
 
+var last = 0
+var cache
+var latest = function (done) {
+  var now = +new Date
+  if (now < (last + 36e5)) //1h
+    return done(cache)
+  console.log('request openexchangerates.org')
+  request({url: 'http://openexchangerates.org/api/latest.json', qs: {app_id: config.appId}, json: true}, function (err, r, data) {
+    last = now
+    done(data)
+  })
+}
+
 module.exports = function () {
   request({url: config.url + config.token + '/setWebhook', qs: {url: config.setWebhook}}, function (err) {
     if (err)
@@ -12,7 +25,7 @@ module.exports = function () {
   })
   return function (req, res) {
     console.log(req.body)
-    request({url: 'http://openexchangerates.org/api/latest.json', qs: {app_id: config.appId}, json: true}, function (err, r, data) {
+    latest(function (data) {
       if (req.body.inline_query) {
         var results = []
         _.each(data.rates, function (d, sym) {
