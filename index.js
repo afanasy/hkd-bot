@@ -12,7 +12,8 @@ var latest = function (done) {
   console.log('request openexchangerates.org')
   request({url: 'http://openexchangerates.org/api/latest.json', qs: {app_id: config.appId}, json: true}, function (err, r, data) {
     last = now
-    done(data)
+    cache = data
+    done(cache)
   })
 }
 
