@@ -1,7 +1,6 @@
-var
-  _ = require('underscore'),
-  request = require('request'),
-  config = require('solid-config')
+var _ = require('underscore')
+var request = require('request')
+var config = require('solid-config')
 
 var last = 0
 var cache
@@ -26,6 +25,7 @@ module.exports = function () {
   })
   return function (req, res) {
     console.log(req.body)
+    request({url: config.url + config.token + '/sendMessage', qs: {chat_id: config.chatId, text: '```\n' + JSON.stringify(req.body, null, '  ') + '\n```', parse_mode: 'Markdown'}}, _.noop)
     latest(function (data) {
       if (req.body.inline_query) {
         var results = []
