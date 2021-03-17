@@ -1,6 +1,6 @@
 var _ = require('underscore')
-var request = require('request')
-var config = require('solid-config')
+var superagent  = require('superagent')
+var config = require(__dirname + '/../.' + require('./package').name)
 
 var last = 0
 var cache
@@ -9,24 +9,18 @@ var latest = function (done) {
   if (now < (last + 36e5)) //1h
     return done(cache)
   console.log('request openexchangerates.org')
-  request({url: 'http://openexchangerates.org/api/latest.json', qs: {app_id: config.appId}, json: true}, function (err, r, data) {
+  superagent('http://openexchangerates.org/api/latest.json').query({app_id: config.appId}).end((err, res) => {
     last = now
-    cache = data
+    cache = res.body
     done(cache)
   })
 }
 
-module.exports = function () {
-  request({url: config.url + config.token + '/setWebhook', qs: {url: config.setWebhook}}, function (err) {
-    if (err)
-      console.log(err)
-    else
-      console.log('setWebhook ok', config.setWebhook)
-  })
-  return function (req, res) {
+module.exports = () => {
+  return (req, res) => {
     console.log(req.body)
-    request({url: config.url + config.token + '/sendMessage', qs: {chat_id: config.chatId, text: '```\n' + JSON.stringify(req.body, null, '  ') + '\n```', parse_mode: 'Markdown'}}, _.noop)
-    latest(function (data) {
+    superagent('https://api.telegram.org/bot' + config.token + '/sendMessage').query({chat_id: config.chatId, text: '```\n' + JSON.stringify(req.body, null, '  ') + '\n```', parse_mode: 'Markdown'}).end(_.noop)
+    latest((data) => {
       if (req.body.inline_query) {
         var results = []
         _.each(data.rates, function (d, sym) {
@@ -55,8 +49,7 @@ module.exports = function () {
         var sym = req.body.message.text.toUpperCase()
         if (data.rates[sym])
           text = sym + ' ' + (data.rates.HKD / data.rates[sym]).toFixed(2)
-        res.json({method: 'sendMessage', chat_id: req.body.message.chat.id, text: text})
-        return
+        return res.json({method: 'sendMessage', chat_id: req.body.message.chat.id, text: text})
       }
       res.end()
     })
